@@ -13,10 +13,12 @@ class Api
     protected $accessToken;
     protected $host = 'https://api.admitad.com';
     private $lastRequest;
+    private $proxy = null;
     private $lastResponse;
 
-    public function __construct($accessToken = null)
+    public function __construct($accessToken = null, $proxy = null)
     {
+        $this->proxy = $proxy;
         $this->accessToken = $accessToken;
     }
 
@@ -186,6 +188,9 @@ class Api
     protected function createClient()
     {
         $curl = new Curl();
+        if (!is_null($this->proxy)) {
+            $curl->setProxy($this->proxy);
+        }
         $curl->setTimeout(300);
         return $curl;
     }
